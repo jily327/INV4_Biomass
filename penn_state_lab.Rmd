@@ -41,4 +41,7 @@ ggplot(data = inv4_dw_raw) +
   geom_boxplot(mapping = aes(x = Days_After_Planting, y = dry_weight, color = genotype)) + #aes() for variables annotation shift+3
   facet_wrap(field ~ treatment)
 
+
+5+5+5+5+5+5+5+5
+
 ```
