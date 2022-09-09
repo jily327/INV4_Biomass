@@ -1,0 +1,44 @@
+---
+title: "dry_weight_data_analysis"
+output: html_document
+date: "2022-09-01"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library("googledrive")
+library("tidyverse")
+library("googlesheets4")
+```
+
+```{r}
+inv4_dw_url <- "https://docs.google.com/spreadsheets/d/16wSbbTF0CkFFWeUHBdI-I9KuphlMnnoJ7s7DfWnu1wM/edit#gid=0"
+inv4_dw_raw <- inv4_dw_url %>%
+  as_id() %>%
+  range_read(ss = ., sheet = "Hoja 1")
+
+
+inv4_dw_raw %>%
+  count(Days_After_Planting, field, treatment, genotype)
+ 
+inv4_dw_raw %>%
+  filter(!is.na(dry_weight)) %>% # !means contrast
+  group_by(Days_After_Planting, field, treatment, genotype) %>%
+  summarise(dry_weight = mean(dry_weight)) %>%
+  ungroup() %>%
+  arrange(desc(dry_weight)) %>%
+  view()
+  print(n = 42)
+  
+  filter(Days_After_Planting == "40 DAP" & field == "P_field" & !genotype == "INV4")
+  
+ggplot(data = inv4_dw_raw) +
+  geom_boxplot(mapping = aes(x = Days_After_Planting, y = dry_weight, color = genotype)) + #aes() for variables annotation shift+3
+  facet_wrap(field ~ treatment)
+
+```
